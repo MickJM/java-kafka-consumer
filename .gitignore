@@ -25,5 +25,6 @@
 /.nb-gradle/
 
 #
-*.yaml
-*.yml
+#*.yaml
+#*.yml
+#kafkaconsumer.ini

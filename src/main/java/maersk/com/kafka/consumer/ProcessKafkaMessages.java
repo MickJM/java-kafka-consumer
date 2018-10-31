@@ -2,6 +2,9 @@ package maersk.com.kafka.consumer;
 
 import java.util.Map;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -26,31 +29,48 @@ import org.springframework.messaging.handler.annotation.Payload;
 @EnableKafka
 public class ProcessKafkaMessages {
 
-	@Value("${kafka.src.topic}")
+	//@Value("${kafka.src.topic}")
 	private String srcTopic;
 	
-	//@Autowired
-	private DefaultKafkaConsumerFactory defaultKafka;
-	
+	//private DefaultKafkaConsumerFactory<String,String> defaultKafka;	
 	private ConsumerFactory<?, ?> consumerFactory;
-	//private DefaultKafkaConsumerFactory consumerFactory;
 	
+	// Logger
+    static Logger log = Logger.getLogger(ProcessKafkaMessages.class);
+
+    /**
+     * Constructor 
+     * 
+     * @param consumerFactory
+     * @param defaultKafka
+     */
+	//public ProcessKafkaMessages(ConsumerFactory<?, ?> consumerFactory,
+	//		DefaultKafkaConsumerFactory defaultKafka, String topicName) {
 	public ProcessKafkaMessages(ConsumerFactory<?, ?> consumerFactory,
-			DefaultKafkaConsumerFactory defaultKafka) {
-		this.consumerFactory = consumerFactory;		
-		this.defaultKafka = defaultKafka;		
-
-	}
-	//public ProcessKafkaMessages(DefaultKafkaConsumerFactory consumerFactory) {
+				String topicName) {
+		
 	//	this.consumerFactory = consumerFactory;		
-	//}
+	//	this.defaultKafka = defaultKafka;		
+		this.srcTopic = topicName;
+		log.info("TopicName = " + this.srcTopic);
+		
+	}
 
-    @KafkaListener(topics = "${kafka.src.topic}")
-    public void listen(@Payload String message) {
-        System.out.println("received message=" + message);
+	/**
+	 * Process any messages received ...
+	 * @param consumerRecord
+	 */
+	@KafkaListener(topics = "${kafka.src.topic}")
+    public void listen(ConsumerRecord<?,?> consumerRecord) {
+        System.out.println("received message on " 
+        					+ consumerRecord.topic() 
+        					+ "- key:" 
+        					+ consumerRecord.key()
+        					+ " value: " + consumerRecord.value());
+
     }
-
 	
+	/*
 	@Bean
 	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> 
 							kafkaListenerContainerFactory() {
@@ -61,31 +81,6 @@ public class ProcessKafkaMessages {
         factory.getContainerProperties().setPollTimeout(3000);
         return factory;
     }
-	
-    
-	//@Bean
-    //public ConsumerFactory<Integer, String> consumerFactory() {
-    //    return new DefaultKafkaConsumerFactory<>(consumerConfigs());
-    //}
-
-	/*
-	@Bean
-	public IntegrationFlow consumer() {
-		
-		
-		IntegrationFlowBuilder bld = IntegrationFlows
-				.from(Kafka
-						.messageDrivenChannelAdapter(this.consumerFactory,
-								KafkaMessageDrivenChannelAdapter.ListenerMode.record, srcTopic)
-						.configureListenerContainer(c -> c
-								.ackMode(AbstractMessageListenerContainer.AckMode.MANUAL)
-				.get()));
-								
-								//.errorHandler(new SeekToCurrentErrorHandler())));
-		//this.flowContext.registration(flow).register();		
-		
-		return null;
-	}
-	*/
+    */
 	
 }

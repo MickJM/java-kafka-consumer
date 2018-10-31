@@ -1,0 +1,24 @@
+debug: false
+spring:
+  application:
+    name: Kafka-Consumer
+    groupID: Kafka-Group    
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always        
+  security:
+    enabled: false
+logging:
+  level:
+    root: INFO
+    org.springframework.web: ERROR
+    com.howtodoinjava: DEBUG
+    org.hibernate: ERROR    
+server:
+  port:
+    8099
