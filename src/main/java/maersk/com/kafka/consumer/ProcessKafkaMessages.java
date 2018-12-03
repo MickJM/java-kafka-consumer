@@ -17,6 +17,8 @@ import org.springframework.integration.kafka.dsl.Kafka;
 import org.springframework.integration.kafka.inbound.KafkaMessageDrivenChannelAdapter;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.PartitionOffset;
+import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
@@ -60,7 +62,13 @@ public class ProcessKafkaMessages {
 	 * Process any messages received ...
 	 * @param consumerRecord
 	 */
-	@KafkaListener(topics = "${kafka.src.topic}")
+	//@KafkaListener(topics = "${kafka.src.topic}")
+
+	//@KafkaListener(topicPartitions = @TopicPartition(topic = "${kafka.src.topic}", 
+	//		partitionOffsets = @PartitionOffset(partition = "0", initialOffset = "0")) )
+	
+	@KafkaListener(topicPartitions = @TopicPartition(topic = "${kafka.src.topic}", 
+			partitionOffsets = @PartitionOffset(initialOffset = "0", partition = "0")) )
     public void listen(ConsumerRecord<?,?> consumerRecord) {
         System.out.println("received message on " 
         					+ consumerRecord.topic() 

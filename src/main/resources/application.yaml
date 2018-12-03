@@ -19,6 +19,7 @@ logging:
     org.springframework.web: ERROR
     com.howtodoinjava: DEBUG
     org.hibernate: ERROR    
+    org.apache.kafka.common.network.SslTransportLayer: ERROR
 server:
   port:
     8099

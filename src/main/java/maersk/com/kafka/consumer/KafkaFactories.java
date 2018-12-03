@@ -117,7 +117,9 @@ public class KafkaFactories {
 		properties.put("acks", "1");
 		 */
 		
-		properties.put("auto.offset.reset", "latest");
+		//properties.put("auto.offset.reset", "latest");
+		properties.put("auto.offset.reset", "earliest");
+
 		properties.put("enable.auto.commit", "false");
 		properties.put("auto.commit.interval.ms", "1000");
 
@@ -180,7 +182,7 @@ public class KafkaFactories {
 			properties.put("sasl.jaas.config",
 					loginModule + " required username=" + username + " password=" + password + ";");
 		}
-		properties.put("ssl.keymanager.algorithm", "SunX509");
+		//properties.put("ssl.keymanager.algorithm", "SunX509");
 
 	}
 
